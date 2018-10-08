@@ -1,0 +1,87 @@
+class Array(object):
+    def __init__(self,size,fillvalue=None):
+        self.items=list()
+        self._logicalsize=0
+        for i in range(size):
+            self.items.append(fillvalue)
+    def __len__(self):
+        return len(self.items)
+    def str(self):
+        return str(self.items)
+    def __iter__(self):
+        return iter(self.items) 
+    def __getitem__(self,index):
+        if 0<=index<self.size():
+            return self.items[index]
+        else:
+            try:
+                return self.items[index]
+            except IndexError as e:
+                print(e)
+    def __setitem__(self,index,newItem):
+        if 0<=index<self.size():
+            self.items[index]=newItem
+        else:
+            try:
+                self.items[index]=newItem
+            except IndexError as e:
+                print(e)
+        self._logicalsize+=1
+    def size(self):
+        return self._logicalsize
+    def grow(self):
+        #增加数组大小
+        test=Array(len(self.items)*2)
+        for i in range(self.size()):
+            test[i]=self.items[i]
+        self.items=test
+        return self.items
+    def shrink(self):
+        test=Array(self.size())
+        for i in range(self.size()):
+            test[i]=self.items[i]
+        self.items=test
+        return self.items
+    def insert(self,targetindex,item):
+        while self.size()>=len(self.items):
+            self.grow()
+        if 0<=targetindex<self.size():
+            for i in range(self.size(),targetindex,-1):
+                self.items[i]=self.items[i-1]
+            self.items[targetindex]=item
+        elif self.size()<=targetindex<len(self.items):
+            self.items[self.size()]=item
+        else:
+            self.__getitem__(targetindex)
+        self._logicalsize+=1
+        return self.items
+    def pop(self,targetindex):
+        if 0<=targetindex<self._logicalsize:
+            number1=self.items[targetindex]
+            for i in range(targetindex,self._logicalsize):
+                self.items[i]=self.items[i+1]
+        elif self._logicalsize<=targetindex<len(self.items):
+            self.items[self._logicalsize-1]=None
+        else:
+            self.__getitem__(targetindex)
+        self._logicalsize-=1
+        return number1
+    def __eq__(self,comparearray):
+        if type(self)==type(comparearray):
+            if self.size()==comparearray.size():
+                i=0
+                while i<self.size() and self.items[i]==comparearray[i]:
+                    i+=1
+                if i==self.size():
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
+
+
+
+
+    
