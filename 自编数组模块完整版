@@ -1,0 +1,64 @@
+from 数组 import Array
+class Arraybag(object):
+    '''define a array bag'''
+    #class variable
+    DEFAULT_CAPACITY=10
+    #Constructor
+    def __init__(self,soursecollection=None):
+       self._items=Array(self.DEFAULT_CAPACITY)
+       self._size=0
+       if soursecollection:
+           for item in soursecollection:
+               self.add(item)
+    def __getitem__(self,index):
+        return self._items[index]
+    def add(self,item):
+        self._items[len(self)]=item
+        self._size+=1
+    def isEmpty(self):
+        return len(self)==0
+    def __len__(self):
+        return self._size
+    def clear(self):
+        self._size=0
+        self._items=Array(self.DEFAULT_CAPACITY)
+    def __iter__(self):
+        cursor=0
+        while cursor<len(self):
+            yield self._items[cursor]
+            cursor+=1
+    def __str__(self):
+        return "{"+",".join(map(str,self))+"}"
+    def __add__(self,other):
+        result=Arraybag(self)
+        for item in other:
+            result.add(item)
+        return result
+    def __eq__(self,other):
+        if self is other:
+            return True
+        if type(self)!=type(other) or len(self)!=len(other):
+            return False
+        for item in self:
+            if not item in other:
+                return False
+        return True
+    def remove(self,item):
+        if not item in self:
+            raise KeyError(str(item)+"not in this")
+        targetindex=0
+        for targetitem in self:
+            if targetitem!=item:
+                targetindex+=1
+            else:
+                break
+        for index in range(targetindex,len(self)-1):
+            self._items[index]=self._items[index+1]
+        self._size-=1
+array=Arraybag(range(0,9))
+print(array[2])
+array.remove(6)
+for i in array:
+    print(i)
+                    
+        
